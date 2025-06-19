@@ -1,0 +1,50 @@
+FROM fedora:42 AS builder
+
+RUN dnf install -y \
+  gcc \
+  git \
+  glibc-langpack-en \
+  gmp-devel \
+  make \
+  stack \
+  zlib-devel
+
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
+
+WORKDIR /app
+
+# Step 1 of pre-build caching
+COPY stack.yaml \
+  stack.yaml.lock \
+  package.yaml \
+  *.cabal \
+  ./
+
+# Step 2 of pre-build caching
+RUN stack setup && stack build --only-dependencies
+
+COPY . .
+
+RUN stack build --copy-bins
+
+FROM fedora-minimal:42
+
+WORKDIR /app
+
+RUN microdnf install -y zlib && microdnf clean all
+
+COPY --from=builder \
+  /app/.stack-work/install/x86_64-linux/**/bin/web \
+  /app/web
+
+COPY static /app/static
+COPY config /app/config
+
+EXPOSE 3000
+
+RUN useradd -m appuser
+# USER appuser
+
+CMD ["/app/web", "+RTS", "-N"]
