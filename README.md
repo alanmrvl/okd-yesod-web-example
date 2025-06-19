@@ -41,3 +41,12 @@ stack test --flag web:library-only --flag web:dev
 * There are several chatrooms you can ask for help:
 	* For IRC, try Freenode#yesod and Freenode#haskell
 	* [Functional Programming Slack](https://fpchat-invite.herokuapp.com/), in the #haskell, #haskell-beginners, or #yesod channels.
+
+## Deploying to local crc/okd cluster
+
+```bash
+eval $(crc oc-env)
+# podman build -t alanmrvl-yesod-web-example .
+oc apply -f buildconfig.yaml
+oc start-build alanmrvl-yesod-web-example
+```

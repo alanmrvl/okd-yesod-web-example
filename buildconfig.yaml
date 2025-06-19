@@ -1,0 +1,19 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: alanmrvl-yesod-web-example
+spec:
+  source:
+    type: Git
+    git:
+      uri: https://github.com/alanmrvl/okd-yesod-web-example.git
+    contextDir: .
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Containerfile
+  output:
+    to:
+      kind: ImageStreamTag
+      name: alanmrvl-yesod-web-example:latest
+
