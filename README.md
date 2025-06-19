@@ -47,6 +47,7 @@ stack test --flag web:library-only --flag web:dev
 ```bash
 eval $(crc oc-env)
 # podman build -t alanmrvl-yesod-web-example .
-oc apply -f buildconfig.yaml
+oc apply -f okd/imagestream.yaml
+oc apply -f okd/buildconfig.yaml
 oc start-build alanmrvl-yesod-web-example
 ```
