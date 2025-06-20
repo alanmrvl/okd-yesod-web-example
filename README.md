@@ -42,12 +42,22 @@ stack test --flag web:library-only --flag web:dev
 	* For IRC, try Freenode#yesod and Freenode#haskell
 	* [Functional Programming Slack](https://fpchat-invite.herokuapp.com/), in the #haskell, #haskell-beginners, or #yesod channels.
 
+## Non-Production crc/okd config changes
+
+Source:
+- https://docs.okd.io/latest/registry/configuring_registry_storage/configuring-registry-storage-baremetal.html
+
+```bash
+oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"managementState":"Managed"}}'
+oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"storage":{"emptyDir":{}}}}'
+```
+
 ## Deploying to local crc/okd cluster
 
 ```bash
 eval $(crc oc-env)
-# podman build -t alanmrvl-yesod-web-example .
 oc apply -f okd/imagestream.yaml
 oc apply -f okd/buildconfig.yaml
 oc start-build alanmrvl-yesod-web-example
+oc describe build <build-name>
 ```

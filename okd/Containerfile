@@ -1,4 +1,4 @@
-FROM fedora:42 AS builder
+FROM registry.fedoraproject.org/fedora:42 AS builder
 
 RUN dnf install -y \
   gcc \
@@ -29,7 +29,7 @@ COPY . .
 
 RUN stack build --copy-bins
 
-FROM fedora-minimal:42
+FROM registry.fedoraproject.org/fedora-minimal:42
 
 WORKDIR /app
 
