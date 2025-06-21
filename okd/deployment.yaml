@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alanmrvl-yesod-web-example
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alanmrvl-yesod-web-example
+  template:
+    metadata:
+      labels:
+        app: alanmrvl-yesod-web-example
+    spec:
+      containers:
+      - name: alanmrvl-yesod-web-example
+        #image: alanmrvl-yesod-web-example:latest
+        image: default-route-openshift-image-registry.apps-crc.testing/default/alanmrvl-yesod-web-example:latest
+        ports:
+        - containerPort: 3000
+
