@@ -27,7 +27,7 @@ RUN stack setup && stack build --only-dependencies
 
 COPY . .
 
-RUN stack build --copy-bins
+RUN stack build --copy-bins --local-bin-path /build-output
 
 FROM registry.fedoraproject.org/fedora-minimal:42
 
@@ -36,7 +36,7 @@ WORKDIR /app
 RUN microdnf install -y zlib && microdnf clean all
 
 COPY --from=builder \
-  /app/.stack-work/install/x86_64-linux/**/bin/web \
+  /build-output/web \
   /app/web
 
 COPY static /app/static
